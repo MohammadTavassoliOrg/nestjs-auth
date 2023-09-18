@@ -19,13 +19,18 @@ export class UsersService {
     return `This action returns all users`;
   }
 
-  async findOne(id: bigint, filter: object): Promise<User | null> {
+  async findOne(id: number, filter: object | undefined): Promise<User | null> {
     const user = await this.usersRepository.findOne({
       where: {
         id
       },
       select: filter
     })
+    return user;
+  }
+
+  async findOneByEmail(email: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({where: { email }});
     return user;
   }
 
