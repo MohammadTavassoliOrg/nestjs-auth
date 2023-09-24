@@ -19,4 +19,10 @@ export class User {
 
     @Column()
     email: string;
+
+    @Column()
+    refresh_token: string;
+
+    @Column()
+    access_token_hash: string;
 }
