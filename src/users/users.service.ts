@@ -24,6 +24,11 @@ export class UsersService {
     return user;
   }
 
+  async findOneByRefreshToken(refresh_token: string): Promise<User | null> {
+    const user = await this.usersRepository.findOne({where: { refresh_token }});
+    return user;
+  }
+
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
