@@ -4,7 +4,7 @@ import { IsNotEmpty, IsNumber, IsString, validateSync } from 'class-validator'
 class EnvironmentVariables {
     @IsNumber()
     @IsNotEmpty()
-    PORT: number;
+    APP_PORT: number;
 
     @IsString() 
     @IsNotEmpty()
@@ -35,6 +35,10 @@ class EnvironmentVariables {
     @IsString()
     @IsNotEmpty()
     JWT_TOKEN_EXPIRE_TIME: string;
+
+    @IsNumber()
+    @IsNotEmpty()
+    HASH_SALT_ROUNDS: number
 }
  
 export function validate(config: Record<string, unknown>) {
