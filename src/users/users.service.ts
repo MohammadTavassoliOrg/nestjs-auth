@@ -5,8 +5,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
+import { UpdateUserTokensDto } from './dto/update-user-tokens.dto';
 
 @Injectable()
 export class UsersService {
@@ -30,7 +30,9 @@ export class UsersService {
   }
 
   async hashUserPassword(password: string): Promise<string> {
-    const hash = await bcrypt.hashSync(password, +this.configService.get('app.salt'));
+    const hash = await bcrypt.hashSync(
+      password, +this.configService.get('app.salt')
+    );
     return hash;
   }
 
@@ -40,16 +42,27 @@ export class UsersService {
   }
 
   async findUserByEmail(email: string): Promise<User | null> {
-    const user = await this.usersRepository.findOne({where: { email, isDeleted: false }});
+    const user = await this.usersRepository.findOne({where: 
+      { email, isDeleted: false }
+    });
     return user;
+  }
+
+  async isExistsUser(email: string): Promise<true | false> {
+    const user = await this.usersRepository.findOne({where: 
+      { email, isDeleted: false }
+    });
+    return user ? true : false;
   }
 
   async findOneByRefreshToken(refresh_token: string): Promise<User | null> {
-    const user = await this.usersRepository.findOne({where: { refresh_token, isDeleted: false }});
+    const user = await this.usersRepository.findOne({where: 
+      { refresh_token, isDeleted: false }
+    });
     return user;
   }
 
-  async updateUserTokens(id: number, updateUserDto: UpdateUserDto) {
+  async updateUserTokens(id: number, updateUserDto: UpdateUserTokensDto) {
     const user = await this.usersRepository.save({...updateUserDto, id});
     return user;
   }
