@@ -6,7 +6,7 @@ import { AuthErrors } from './enums';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/auth-signin.dto';
-import { HashManager } from '../helpers/hash-manager.helper';
+import { HashManager } from '../common/helpers/hash-manager.helper';
 import { LogInInterface } from './interface/auth-login.interface';
 
 @Controller('auth')
@@ -22,10 +22,10 @@ export class AuthController {
   async login(@Body() signInDto: SignInDto): Promise<LogInInterface> {
     const userFound = await this.usersService.findUserByEmail(signInDto.email);
     if (!userFound)
-      throw new UnauthorizedException(AuthErrors.INVALID_CREDINTIALS);
+      throw new UnauthorizedException(AuthErrors.USER_NOT_FOUND);
 
     if (!new HashManager(this.configService).compareSync(signInDto.password, userFound.password)) {
-      throw new BadRequestException(AuthErrors.INVALID_CREDINTIALS);
+      throw new BadRequestException(AuthErrors.INVALID_EMAIL_OR_PASSWORD);
     }
 
     const { refresh_token, refresh_token_generate_date } = this.authService.generateRefreshToken();
@@ -48,8 +48,7 @@ export class AuthController {
   async signUp(@Body() signUpDto: SignUpDto): Promise<LogInInterface> {
     const userFound = await this.usersService.isExistsUser(signUpDto.email);
     if (userFound)
-      throw new UnauthorizedException(AuthErrors.INVALID_CREDINTIALS);
-
+      throw new UnauthorizedException(AuthErrors.DUPLICATE_EMAIL);
     const { refresh_token, refresh_token_generate_date } = this.authService.generateRefreshToken();
 
     // Storing user in database to get id
