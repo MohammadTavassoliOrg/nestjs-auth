@@ -1,13 +1,13 @@
 import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/signup.dto';
+import { SignUpDto } from './dto/auth-signup.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthErrors } from './enums';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
-import { SignInDto } from './dto/signin.dto';
+import { SignInDto } from './dto/auth-signin.dto';
 import { HashManager } from '../helpers/hash-manager.helper';
-import { LogInInterface } from './interface/login.interface';
+import { LogInInterface } from './interface/auth-login.interface';
 
 @Controller('auth')
 export class AuthController {

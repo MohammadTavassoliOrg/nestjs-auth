@@ -1,10 +1,8 @@
-import { SignInDto } from './dto/signin.dto';
+import { SignInDto } from './dto/auth-signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './../users/users.service';
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { SignUpDto } from './dto/signup.dto';
-import { UserErrors } from 'src/users/enums';
 @Injectable()
 export class AuthService {
   constructor(
