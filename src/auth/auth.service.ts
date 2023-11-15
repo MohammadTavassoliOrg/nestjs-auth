@@ -1,4 +1,3 @@
-import { SignInDto } from './dto/auth-signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './../users/users.service';
 import { Injectable } from '@nestjs/common';
@@ -9,17 +8,6 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService
   ) {}
-
-  // async signIn(signInDto: SignInDto): Promise<any> {
-  //   const user = await this.usersService.findUserByEmail(signInDto.email);
-  //   if (user?.password !== signInDto.password) {
-  //     throw new UnauthorizedException();
-  //   }
-  //   const payload = { id: user.id };
-  //   return {
-  //     access_token: await this.jwtService.signAsync(payload),
-  //   };
-  // }
 
   async generateAccessToken(id: number): Promise<string> {
     const token = await this.jwtService.signAsync({
