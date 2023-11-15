@@ -1,7 +1,10 @@
+import { SignInDto } from './dto/signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from './../users/users.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
+import { SignUpDto } from './dto/signup.dto';
+import { UserErrors } from 'src/users/enums';
 @Injectable()
 export class AuthService {
   constructor(
@@ -9,14 +12,30 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async signIn(email: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOneByEmail(email);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
-    }
-    const payload = { sub: user.id, username: user.email };
+  // async signIn(signInDto: SignInDto): Promise<any> {
+  //   const user = await this.usersService.findUserByEmail(signInDto.email);
+  //   if (user?.password !== signInDto.password) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   const payload = { id: user.id };
+  //   return {
+  //     access_token: await this.jwtService.signAsync(payload),
+  //   };
+  // }
+
+  async generateAccessToken(id: number): Promise<string> {
+    const token = await this.jwtService.signAsync({
+      id,
+    });
+    return token;
+  }
+
+  generateRefreshToken() {
+    const refresh_token: string = uuidv4();
+    const refresh_token_generate_date: Date = new Date();
     return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
+      refresh_token,
+      refresh_token_generate_date,
+    }
   }
 }
