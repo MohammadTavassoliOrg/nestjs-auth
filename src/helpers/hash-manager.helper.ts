@@ -8,8 +8,6 @@ export class HashManager {
 
     compareSync(string: string, hash: string) {
         const result = bcrypt.compareSync(string, hash);
-        console.log('>>>>>: ',result);
-        
         return result;
     }
 
