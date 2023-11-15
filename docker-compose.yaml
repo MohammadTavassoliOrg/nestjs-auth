@@ -10,7 +10,7 @@ services:
       - 3000:3000
     volumes:
      - ./:/app
-    #  - /app/node_modules
+     - /app/node_modules
     depends_on:
       - auth-db
 
@@ -19,13 +19,9 @@ services:
     container_name: mysql
     expose:
       - 3306
-    ports:
-      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=mohammad
       - MYSQL_DATABASE=auth
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=mohammad
     volumes:
       - mysql-db:/var/lib/mysql
 volumes:
