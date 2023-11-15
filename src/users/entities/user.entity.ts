@@ -1,5 +1,4 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
-
+import {Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -23,6 +22,9 @@ export class User {
     @Column()
     refresh_token: string;
 
-    @Column()
+    @Column({ nullable: true })
     access_token_hash: string;
+
+    @Column()
+    refresh_token_generate_date: Date
 }
