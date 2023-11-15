@@ -12,13 +12,13 @@ class EnvironmentVariables {
 
     @IsNumber()
     @IsNotEmpty()
-    DB_PORT: number = 3306;
+    DB_PORT: number;
 
     @IsString()
-    DB_HOST: string = 'localhost';
+    DB_HOST: string;
 
     @IsString()
-    DB_TYPE: string = 'mysql';
+    DB_TYPE: string;
     
     @IsString()
     @IsNotEmpty()
