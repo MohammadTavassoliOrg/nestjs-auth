@@ -1,10 +1,9 @@
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserTokensDto } from './dto/update-user-tokens.dto';
 
@@ -19,7 +18,7 @@ export class UsersService {
   async createUser(
     createUserDto: CreateUserDto, refresh_token: string, 
     refresh_token_generate_date: Date
-  ) {
+  ): Promise<User> {
 
     const password = await this.hashUserPassword(createUserDto.password);
     const user = await this.usersRepository.save({
@@ -36,7 +35,7 @@ export class UsersService {
     return hash;
   }
 
-  async addUserTokenHash(id: number, access_token_hash: string) {
+  async addUserTokenHash(id: number, access_token_hash: string): Promise<UpdateResult> {
     const user = await this.usersRepository.update(id, { access_token_hash });
     return user;
   }
@@ -44,6 +43,14 @@ export class UsersService {
   async findUserByEmail(email: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({where: 
       { email, isDeleted: false }
+    });
+    return user;
+  }
+
+  async findUserById(id: number, selection: object): Promise<User | null> {
+    const user = await this.usersRepository.findOne({
+      where: { id, isDeleted: false },
+      select: selection
     });
     return user;
   }
@@ -62,8 +69,12 @@ export class UsersService {
     return user;
   }
 
-  async updateUserTokens(id: number, updateUserDto: UpdateUserTokensDto) {
+  async updateUserTokens(id: number, updateUserDto: UpdateUserTokensDto): Promise<User> {
     const user = await this.usersRepository.save({...updateUserDto, id});
     return user;
+  }
+
+  async removeUserById(id: number): Promise<DeleteResult> {
+    return await this.usersRepository.delete({ id });
   }
 }
